@@ -1,19 +1,12 @@
 import React from "react";
-import logo from "./logo.svg";
 import "./App.css";
+// import api from "./services/api";
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img
-          src={logo}
-          className="App-logo"
-          alt="logo"
-          onClick={() => {
-            console.log("opaaa");
-          }}
-        />
+        <button onClick={() => {}} />
       </header>
     </div>
   );
