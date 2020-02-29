@@ -1,14 +1,15 @@
 import React from "react";
-import "./App.css";
-// import api from "./services/api";
+import { BrowserRouter } from "react-router-dom";
+
+import Headers from "./components/Header";
+import Routes from "./routes";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <button onClick={() => {}} />
-      </header>
-    </div>
+    <BrowserRouter>
+      <Headers />
+      <Routes />
+    </BrowserRouter>
   );
 }
 

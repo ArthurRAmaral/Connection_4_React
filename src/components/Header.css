@@ -1,0 +1,24 @@
+header#main-header {
+  background-color: #fff;
+  height: 72px;
+  border-bottom: 1px solid #ddd;
+}
+
+header#main-header .header-content {
+  width: 100%;
+  max-width: 980px;
+  margin: 0 auto;
+  height: 72px;
+  padding: 0 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+header#main-header .header-content img#logo {
+  width: 190px;
+}
+
+header#main-header .header-content img#camera {
+  width: 40px;
+}
