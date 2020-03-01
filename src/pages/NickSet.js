@@ -32,8 +32,8 @@ export default class NickSet extends Component {
             type="text"
             name="nickname"
             placeholder="Nickname"
-            maxlength="15"
-            minlength="3"
+            maxLength="15"
+            minLength="3"
             onChange={this.handleChange}
             value={this.state.nickname}
             required
