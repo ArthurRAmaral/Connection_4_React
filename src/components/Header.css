@@ -1,24 +1,67 @@
 header#main-header {
-  background-color: #fff;
-  height: 72px;
-  border-bottom: 1px solid #ddd;
+  background-color: #c4c4c4;
+  height: 150px;
+  border-bottom: 2px solid black;
 }
 
 header#main-header .header-content {
   width: 100%;
-  max-width: 980px;
+  max-width: 1080px;
   margin: 0 auto;
-  height: 72px;
-  padding: 0 30px;
+  height: 150px;
+  padding: 0 50px;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
 header#main-header .header-content img#logo {
-  width: 190px;
+  width: 140px;
+  border: solid 3px #131313;
+  border-radius: 6px;
 }
 
-header#main-header .header-content img#camera {
-  width: 40px;
+header#main-header .header-content #newBtn {
+  border: solid 2px black;
+  border-radius: 6px;
+  color: black;
+  text-decoration: none;
+  padding: 10px;
+  background-color: rgb(241, 241, 241);
+}
+
+header#main-header .header-content #newBtn:hover {
+  background-color: rgb(250, 0, 0);
+}
+
+header#main-header .header-content #newBtn h1 {
+  display: inline;
+  margin: 15px;
+}
+
+header#main-header .header-content img#meetRoom {
+  width: 25px;
+}
+
+header#main-header .header-content img#editNick {
+  width: 25px;
+  display: inline;
+}
+
+header#main-header .header-content #editNickBtn {
+  border: solid 2px black;
+  border-radius: 6px;
+  color: black;
+  text-decoration: none;
+  padding: 10px;
+  background-color: rgb(241, 241, 241);
+}
+
+header#main-header .header-content #editNickBtn:hover {
+  background-color: gold;
+}
+
+header#main-header .header-content #editNickBtn h1 {
+  display: inline;
+  margin: 15px;
 }

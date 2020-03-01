@@ -36,49 +36,60 @@ export default class Feed extends Component {
     });
   };
 
-  async handleJoin(room) {
-    const res = await api.put(`join/${room._id}`, {});
+  async handleJoin(room, key) {
+    const res = await api.put(`join/${room._id}`, {
+      key: key,
+      playerGuest: await sessionStorage.getItem("nickname")
+    });
     const status = res.data.status;
     const msg = res.data.statusMsg;
-    console.log(res.data);
     switch (status) {
       case 0:
+        //Join
         alert(msg);
-        break;
-      case 1:
-        alert(msg);
-        break;
-      case 3:
-        alert(msg);
+        sessionStorage.setItem("lastKey", key);
+        sessionStorage.setItem("lastRoomId", room._id);
+        this.props.history.push("/room");
         break;
       default:
+        console.log(res);
+        alert(msg);
         break;
     }
-  }
-
-  async handleBtnClick(id) {
-    // document.getElementById("log-painel").innerHTML=
-    // <input type="text" placeholder="Nickname" id="nickname" />
-    // <input type="text" placeholder="Key" id="key" />
-    // <button onClick={() => this.handleBtnClick(room._id)}>Join</button>
   }
 
   render() {
     return (
       <section id="room-list">
-        <div id="log-painel"></div>
         {this.state.feed.map(room => (
           <article key={room._id}>
             <header>
               <div className="room-info">
-                <span>{room.roomName}</span>
-                <br />
-                <span className="place">{room.playerHost}</span>
-                <button onClick={() => this.handleJoin(room)}>Join</button>
+                <span>
+                  <span className="fix room-name">Room: </span>
+                  <span className="room-name">{room.roomName}</span>
+                </span>
+                <span>
+                  <span className="fix owner">Owner: </span>
+                  <span className="owner">{room.playerHost}</span>
+                </span>
               </div>
+              <form
+                onSubmit={e => {
+                  e.preventDefault();
+                  const keyInpt = document.getElementById(`input${room._id}`)
+                    .value;
+                  this.handleJoin(room, keyInpt);
+                }}
+              >
+                <input
+                  type="password"
+                  placeholder="Password"
+                  id={`input${room._id}`}
+                />
+                <input type="submit" value="Join" />
+              </form>
             </header>
-            <br />
-            <br />
           </article>
         ))}
       </section>
