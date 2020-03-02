@@ -22,11 +22,16 @@ class New extends Component {
         key: key,
         playerHost: this.state.playerHost
       });
+      if (roomCreated.data._id !== undefined) {
+        sessionStorage.setItem("lastKey", key);
+        sessionStorage.setItem("lastRoomId", roomCreated.data._id);
 
-      sessionStorage.setItem("lastKey", key);
-      sessionStorage.setItem("lastRoomId", roomCreated.data._id);
-
-      this.props.history.push("/room");
+        this.props.history.push("/room");
+      } else {
+        alert(roomCreated.data.statusMsg);
+      }
+    } else if (vkey !== key) {
+      alert("Repeat the fist password correctly");
     }
   };
 

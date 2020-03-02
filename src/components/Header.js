@@ -19,9 +19,10 @@ export default function Header() {
           <img src={meetRoom} alt="Create new room" id="meetRoom" />
         </Link>
         <Link to="/" id="editNickBtn">
-          <h1>Nickname</h1>
+          <h1 id="nickname">Nickname</h1>
           <img src={editNick} alt="Edit nickname" id="editNick" />
         </Link>
+        <h1 id="nickname">{sessionStorage.getItem("nickname")}</h1>
       </div>
     </header>
   );
