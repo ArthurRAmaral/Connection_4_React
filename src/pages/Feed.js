@@ -46,13 +46,12 @@ export default class Feed extends Component {
     switch (status) {
       case 0:
         //Join
-        alert(msg);
         sessionStorage.setItem("lastKey", key);
         sessionStorage.setItem("lastRoomId", room._id);
         this.props.history.push("/room");
         break;
       default:
-        console.log(res);
+        console.error(res);
         alert(msg);
         break;
     }

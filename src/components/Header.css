@@ -17,7 +17,7 @@ header#main-header .header-content {
 
 header#main-header .header-content img#logo {
   width: 140px;
-  border: solid 3px #131313;
+  /* border: solid 3px #131313; */
   border-radius: 6px;
 }
 

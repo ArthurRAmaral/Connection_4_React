@@ -3,21 +3,24 @@ import api from "../services/api";
 import io from "socket.io-client";
 
 import "./Room.css";
+
+import loadGif from "../assets/load.gif";
+
 import markEmpty from "../assets/.png";
 import markX from "../assets/x.png";
 import markO from "../assets/o.png";
 
-import loadGif from "../assets/load.gif";
+const stateValue = {
+  room: {},
+  markers: {
+    markEmpty: <img src={markEmpty} className="game-mark e-mark" alt="" />,
+    markX: <img src={markX} className="game-mark x-mark" alt="" />,
+    markO: <img src={markO} className="game-mark o-mark" alt="" />
+  }
+};
 
 export default class Room extends Component {
-  state = {
-    room: {},
-    markers: {
-      markEmpty: <img src={markEmpty} className="game-mark e-mark" alt="" />,
-      markX: <img src={markX} className="game-mark x-mark" alt="" />,
-      markO: <img src={markO} className="game-mark o-mark" alt="" />
-    }
-  };
+  state = stateValue;
 
   async componentDidMount() {
     const id = await sessionStorage.getItem("lastRoomId");
@@ -37,46 +40,32 @@ export default class Room extends Component {
     const socket = io("http://localhost:3333");
 
     socket.on("play#" + id, newRoom => {
-      this.setState({
-        room: newRoom,
-        markers: {
-          markEmpty: (
-            <img src={markEmpty} className="game-mark e-mark" alt="" />
-          ),
-          markX: <img src={markX} className="game-mark x-mark" alt="" />,
-          markO: <img src={markO} className="game-mark o-mark" alt="" />
-        }
-      });
+      stateValue.room = newRoom;
+      this.setState(stateValue);
     });
 
     socket.on("joined#" + id, newRoom => {
-      this.setState({
-        room: newRoom,
-        markers: {
-          markEmpty: (
-            <img src={markEmpty} className="game-mark e-mark" alt="" />
-          ),
-          markX: <img src={markX} className="game-mark x-mark" alt="" />,
-          markO: <img src={markO} className="game-mark o-mark" alt="" />
-        }
-      });
+      stateValue.room = newRoom;
+      this.setState(stateValue);
     });
 
     socket.on("started#" + id, newRoom => {
-      this.setState({
-        room: newRoom,
-        markers: {
-          markEmpty: (
-            <img src={markEmpty} className="game-mark e-mark" alt="" />
-          ),
-          markX: <img src={markX} className="game-mark x-mark" alt="" />,
-          markO: <img src={markO} className="game-mark o-mark" alt="" />
-        }
-      });
+      stateValue.room = newRoom;
+      this.setState(stateValue);
     });
 
-    socket.on("gameover", result => {});
+    socket.on("gameover#" + id, result => {
+      stateValue.room.result = result;
+      this.setState(stateValue);
+      alert(result.win + "won!!");
+    });
   };
+
+  async handleFinish(id) {
+    api.put(`finish/${id}`, {
+      key: await sessionStorage.getItem("lastKey")
+    });
+  }
 
   async handleStart(id) {
     api.put(`start/${id}`, {
@@ -91,7 +80,9 @@ export default class Room extends Component {
       player: await sessionStorage.getItem("nickname")
     };
 
-    await api.post("postplay", body);
+    const res = await api.post("postplay", body);
+    console.log(res.data);
+    if (res.data.status === 12) alert(res.data.statusMsg);
   }
 
   renderRoom = () => {
@@ -102,7 +93,7 @@ export default class Room extends Component {
     const isOfThisRoom =
       isRoomOwner ||
       sessionStorage.getItem("nickname") === this.state.room.playerGuest;
-    if (this.state.room.status >= 2 && isOfThisRoom) {
+    if (this.state.room.status === "2" && isOfThisRoom) {
       content = React.createElement(
         "div",
         { className: "game-table" },
