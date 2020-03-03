@@ -1,14 +1,16 @@
 .game-mark {
-  width: 70px;
-  height: 70px;
+  height: calc((100% - (30px * 6)) / 6);
   margin: 15px;
-  border-radius: 200%;
+  border-radius: 50%;
 }
 
 .game-table {
   background-color: rgb(0, 0, 0);
   border-radius: 6px;
   padding: 0;
+
+  width: calc(150vh - 250px);
+  height: calc(100vh - 250px);
 }
 
 #room {
@@ -20,13 +22,17 @@
 }
 
 .column {
-  cursor: pointer;
-  margin: 20px;
+  width: calc((100% - (40px * 7)) / 7);
+  height: 100%;
+
+  margin: 0 20px;
   display: inline-flex;
   flex-direction: column-reverse;
+  align-items: center;
 }
 
-.column:hover {
+.using:hover {
+  cursor: pointer;
   background-color: rgba(240, 248, 255, 0.055);
 }
 
@@ -50,6 +56,7 @@ div.await-msg {
   padding: 40px;
   font-weight: 700;
   font-size: 20px;
+  height: 100%;
 }
 
 div.await-msg h1 {
@@ -59,5 +66,23 @@ div.await-msg h1 {
 }
 
 div.await-msg img {
-  margin-top: 20px;
+  display: block;
+  margin: 10px auto 0;
+}
+
+#result-msg {
+  position: absolute;
+  font-size: 16px;
+  margin: calc(50vh - 150px - 8px - 6px) calc(50vw - 460px);
+  width: 250px;
+  text-align: center;
+  color: white;
+  background-color: rgb(49, 177, 49);
+  border: solid rgb(58, 248, 58) 4px;
+  border-radius: 6px;
+  padding: 1.5%;
+}
+
+.won-mark {
+  border: solid rgb(58, 248, 58) 3px;
 }

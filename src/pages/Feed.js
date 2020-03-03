@@ -4,6 +4,8 @@ import io from "socket.io-client";
 
 import "./Feed.css";
 
+import socketUrl from "../utils/backendUrl";
+
 export default class Feed extends Component {
   state = {
     feed: []
@@ -17,7 +19,7 @@ export default class Feed extends Component {
   }
 
   registerToSocket = () => {
-    const socket = io("http://localhost:3333");
+    const socket = io(socketUrl);
 
     socket.on("newRoom", newRoom => {
       this.setState({ feed: [newRoom, ...this.state.feed] });

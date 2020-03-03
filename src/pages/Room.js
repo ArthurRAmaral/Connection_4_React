@@ -2,13 +2,15 @@ import React, { Component } from "react";
 import api from "../services/api";
 import io from "socket.io-client";
 
+import socketUrl from "../utils/backendUrl";
+
 import "./Room.css";
 
 import loadGif from "../assets/load.gif";
 
 import markEmpty from "../assets/.png";
-import markX from "../assets/x.png";
-import markO from "../assets/o.png";
+import markX from "../assets/x.jpg";
+import markO from "../assets/o.jpg";
 
 const stateValue = {
   room: {},
@@ -37,7 +39,7 @@ export default class Room extends Component {
   }
 
   registerToSocket = id => {
-    const socket = io("http://localhost:3333");
+    const socket = io(socketUrl);
 
     socket.on("play#" + id, newRoom => {
       stateValue.room = newRoom;
@@ -54,18 +56,14 @@ export default class Room extends Component {
       this.setState(stateValue);
     });
 
-    socket.on("gameover#" + id, result => {
-      stateValue.room.result = result;
+    socket.on("gameover#" + id, newRoom => {
+      stateValue.room = newRoom;
+
+      // stateValue.room.status = "3";
+      console.log(stateValue);
       this.setState(stateValue);
-      alert(result.win + "won!!");
     });
   };
-
-  async handleFinish(id) {
-    api.put(`finish/${id}`, {
-      key: await sessionStorage.getItem("lastKey")
-    });
-  }
 
   async handleStart(id) {
     api.put(`start/${id}`, {
@@ -81,78 +79,116 @@ export default class Room extends Component {
     };
 
     const res = await api.post("postplay", body);
-    console.log(res.data);
     if (res.data.status === 12) alert(res.data.statusMsg);
   }
 
   renderRoom = () => {
-    if (this.state.room.marks === undefined) return;
+    const room = this.state.room;
+    if (room.marks === undefined) return;
     let content = React.createElement("div", { className: "game-table" });
-    const isRoomOwner =
-      sessionStorage.getItem("nickname") === this.state.room.playerHost;
+    const isRoomOwner = sessionStorage.getItem("nickname") === room.playerHost;
     const isOfThisRoom =
-      isRoomOwner ||
-      sessionStorage.getItem("nickname") === this.state.room.playerGuest;
-    if (this.state.room.status === "2" && isOfThisRoom) {
+      isRoomOwner || sessionStorage.getItem("nickname") === room.playerGuest;
+
+    if (room.status === 3) {
       content = React.createElement(
         "div",
-        { className: "game-table" },
-
-        this.state.room.marks.map((array, indx) => (
-          <div
-            className="column"
-            onClick={async () => await this.postPlay(indx)}
-          >
-            {array.map(iten => {
-              // <img src={`${iten}.jpg`} alt="" />
-              // <img src={markTest} alt="" />
-
-              switch (iten) {
-                case "":
-                  return this.state.markers.markEmpty;
-                case "x":
-                  return this.state.markers.markX;
-                case "o":
-                  return this.state.markers.markO;
-                default:
-                  return this.state.markers.markEmpty;
-              }
-            })}
+        {},
+        <div>
+          <div id="result-msg">
+            <h1>{room.result.win + " won!!!"}</h1>
           </div>
-        ))
+          <div className="game-table">
+            {room.marks.map((array, indx) => (
+              <div className="column">
+                {array.map((iten, indxC) => {
+                  for (let index = 0; index < room.result.i.length; index++) {
+                    if (
+                      indx === room.result.i[index] &&
+                      indxC === room.result.j[index]
+                    ) {
+                      let img;
+                      if (room.result.win === room.playerHost) {
+                        img = markX;
+                      } else {
+                        img = markX;
+                      }
+
+                      return React.createElement("img", {
+                        src: img,
+                        className: "game-mark x-mark won-mark",
+                        alt: ""
+                      });
+                    }
+                  }
+                  switch (iten) {
+                    case "":
+                      return this.state.markers.markEmpty;
+                    case "x":
+                      return this.state.markers.markX;
+                    case "o":
+                      return this.state.markers.markO;
+                    default:
+                      return this.state.markers.markEmpty;
+                  }
+                })}
+              </div>
+            ))}
+          </div>
+        </div>
       );
-    } else if (this.state.room.status === "1" && isRoomOwner) {
+    } else if (room.status === 2 && isOfThisRoom) {
       content = React.createElement(
         "div",
-        { className: "game-table" },
+        {},
+        <div className="game-table">
+          {room.marks.map((array, indx) => (
+            <div className="column using" onClick={() => this.postPlay(indx)}>
+              {array.map(iten => {
+                switch (iten) {
+                  case "":
+                    return this.state.markers.markEmpty;
+                  case "x":
+                    return this.state.markers.markX;
+                  case "o":
+                    return this.state.markers.markO;
+                  default:
+                    return this.state.markers.markEmpty;
+                }
+              })}
+            </div>
+          ))}
+        </div>
+      );
+    } else if (room.status === 1 && isRoomOwner) {
+      content = React.createElement(
+        "div",
+        {},
 
-        <div
-          className="start-btn"
-          onClick={() => this.handleStart(this.state.room._id)}
-        >
+        <div className="start-btn" onClick={() => this.handleStart(room._id)}>
           Start
         </div>
       );
-    } else if (this.state.room.status === "1" && isOfThisRoom) {
+    } else if (room.status === 1 && isOfThisRoom) {
       content = React.createElement(
         "div",
-        { className: "game-table" },
+        {},
 
         <div className="await-msg">
           <h1>Wait host start</h1>
           <img src={loadGif} alt="" />
         </div>
       );
-    } else if (this.state.room.status === "0" && isRoomOwner) {
+    } else if (room.status === 0 && isRoomOwner) {
       content = React.createElement(
         "div",
-        { className: "game-table" },
+        {},
         <div className="await-msg">
           <h1>Wait another player!</h1>
           <img src={loadGif} alt="" />
         </div>
       );
-    } else console.log(this.state.room);
+    } else console.log(room);
 
     return content;
   };
