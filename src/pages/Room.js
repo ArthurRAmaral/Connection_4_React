@@ -82,6 +82,10 @@ export default class Room extends Component {
     if (res.data.status === 12) alert(res.data.statusMsg);
   }
 
+  async handleRestart(id) {
+    await api.put("restart", id);
+  }
+
   renderRoom = () => {
     const room = this.state.room;
     if (room.marks === undefined) return;
@@ -95,8 +99,16 @@ export default class Room extends Component {
         "div",
         {},
         <div>
-          <div id="result-msg">
-            <h1>{room.result.win + " won!!!"}</h1>
+          <div id="msg-modal">
+            <div id="result-msg">
+              <h1>{room.result.win + " won!!!"}</h1>
+              <input
+                type="button"
+                className="restart-btn"
+                value="Restart"
+                onClick={this.handleRestart}
+              />
+            </div>
           </div>
           <div className="game-table">
             {room.marks.map((array, indx) => (
