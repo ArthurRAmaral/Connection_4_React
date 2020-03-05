@@ -1,1 +1,1 @@
-module.exports = "http://localhost:3333";
+module.exports = process.env.BACK_END_URL;
