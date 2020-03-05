@@ -1,0 +1,74 @@
+#root {
+  background-color: #666;
+  height: 100vh;
+}
+
+section#room-list {
+  width: 100%;
+  max-width: 580px;
+  margin: 0 auto;
+  padding: 0 30px;
+}
+
+section#room-list article {
+  background-color: #fff;
+  border: 2px solid black;
+  margin-top: 30px;
+  border-radius: 5px;
+}
+
+section#room-list article header {
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+section#room-list article header .room-info {
+  display: flex;
+  flex-direction: column;
+}
+
+section#room-list article header .room-info span.room-name {
+  font-size: 18px;
+}
+
+section#room-list article header span.owner {
+  font-size: 16px;
+  color: #666;
+  margin-top: 20px;
+}
+
+section#room-list article header span.fix {
+  font-weight: bold;
+  display: inline;
+}
+
+section#room-list article header form input {
+  margin: 0px 20px;
+  font-size: 15px;
+  padding: 5px;
+  width: 200px;
+  text-align: center;
+  border-radius: 5px;
+  border: 2px solid black;
+}
+
+section#room-list article header form input[type="submit"] {
+  width: 130px;
+}
+
+section#room-list article header form input[type="submit"]:hover {
+  background-color: gold;
+  cursor: pointer;
+}
+
+section#room-list article header form {
+  margin-top: 15px;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-between;
+}
