@@ -12,12 +12,12 @@ class New extends Component {
   };
 
   handleSubmit = async e => {
-    e.preventDefault();
+    e.preventDefault()();
     const { vkey, key, roomName } = this.state;
     if (vkey === key && roomName.length >= 3 && roomName.length <= 15) {
-      this.state.playerHost = await sessionStorage.getItem("nickname");
+      this.state.playerHost = sessionStorage.getItem("nickname");
 
-      const roomCreated = await api.post("createroom", {
+      const roomCreated = api.post("createroom", {
         roomName: roomName,
         key: key,
         playerHost: this.state.playerHost
