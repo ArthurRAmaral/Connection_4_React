@@ -12,17 +12,17 @@ class New extends Component {
   };
 
   handleSubmit = async e => {
-    e.preventDefault()();
+    e.preventDefault();
     const { vkey, key, roomName } = this.state;
     if (vkey === key && roomName.length >= 3 && roomName.length <= 15) {
-      this.state.playerHost = sessionStorage.getItem("nickname");
+      this.state.playerHost = await sessionStorage.getItem("nickname");
 
-      const roomCreated = api.post("createroom", {
+      const roomCreated = await api.post("createroom", {
         roomName: roomName,
         key: key,
         playerHost: this.state.playerHost
       });
-      if (roomCreated.data._id !== undefined) {
+      if (roomCreated.data._id) {
         sessionStorage.setItem("lastKey", key);
         sessionStorage.setItem("lastRoomId", roomCreated.data._id);
 

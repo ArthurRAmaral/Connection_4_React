@@ -53,7 +53,6 @@ export default class Feed extends Component {
         this.props.history.push("/room");
         break;
       default:
-        console.error(res);
         alert(msg);
         break;
     }
